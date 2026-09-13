@@ -1,0 +1,125 @@
+generated: '2026-09-13'
+method: searched
+source: https://www.novell.com/developer/ndk/
+name: Novell standards conformance
+description: >-
+  Standards Novell's published API surfaces assert conformance to, read from the provider's own documentation
+  rather than from a marketing page. Novell's whole developer posture was standards-first for its era - DSML
+  v2, LDAP v3, IMAP4rev1, SOAP, MAPI and ODMA are all named explicitly in NDK component descriptions - but
+  none of the modern web-API standards (OAuth 2.0, OIDC, RFC 9457, RFC 8594, JSON:API, idempotency keys)
+  appear anywhere, because every one of them postdates the surfaces. Entries marked conforms:false are
+  recorded as honest negatives, not as failures.
+conformance:
+  - id: dsml-v2
+    name: OASIS Directory Services Markup Language v2
+    conforms: true
+    domain_standard: true
+    evidence: >-
+      "DSML is an OASIS standard for representing directory information as XML elements... DSML v2 for
+      eDirectory contains a deployable Web archive (.war) that enables you to access eDirectory as a Web
+      service using SOAP." Stated on the DSML for eDirectory (SOAP) NDK page, which is the contract-bearing
+      page for that surface.
+    source: https://www.microfocus.com/documentation/edirectory-developer-documentation/dsml-for-edirectory-soap/
+    note: >-
+      This is the domain-standard signature for the directory-services market: a consumer that already speaks
+      DSML v2 integrates with eDirectory over SOAP with no bespoke connector. Last published build is
+      2006-02-22 and its download links 404, so the conformance is documented but no longer distributable.
+  - id: ldap-v3
+    name: LDAP v3 (RFC 4511, formerly RFC 2251)
+    conforms: true
+    domain_standard: true
+    evidence: >-
+      The LDAP Libraries for C# NuGet package description states the classes "are based on the IETF LDAP
+      standard"; the NDK ships LDAP Classes for Java, LDAP Libraries for C, LDAP Libraries for C#, a Novell
+      LDAP Extended Library, an LDAP JDBC Driver and an ODBC Driver for eDirectory, all against eDirectory's
+      LDAP interface.
+    source: https://www.nuget.org/packages/Novell.Directory.Ldap
+    note: >-
+      eDirectory is an LDAP directory server; LDAP is the primary programmatic contract for it, and the
+      Novell client libraries are the reference implementations that made JLDAP a de facto Java LDAP stack.
+  - id: soap-1.1
+    name: SOAP 1.1 over HTTP
+    conforms: true
+    evidence: >-
+      "This protocol uses a combination of HTTP, SOAP, and XML to create a GroupWise Web service." The docs
+      specify the soapaction HTTP header as required, and content-type text/xml or application/soap+xml.
+    source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i3q.html
+  - id: wsdl-1.1
+    name: WSDL 1.1 service description
+    conforms: true
+    evidence: >-
+      "The GroupWise Web Services schema definition file (WSDL) provides the tools you need to hook into
+      integrated development environment (IDE) frameworks that support Web Services." The SDK readme
+      describes a "WSDL and Schemas" directory in the archive.
+    source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i3i.html
+    obtainable: false
+    note: >-
+      A WSDL exists and is referenced by name, but it shipped only inside novell-gwsoap-devel-2013.01.15.zip
+      on ftp://sdk.provo.novell.com, which no longer resolves. No copy is served from any live Novell host.
+      Recorded as a documented-but-unobtainable contract; nothing was authored to stand in for it.
+  - id: imap4rev1
+    name: IMAP4rev1 (RFC 3501)
+    conforms: true
+    evidence: >-
+      GroupWise IMAP is a distinct NDK component with its own SDK guide and readme in the GroupWise SDK
+      documentation set.
+    source: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwimap/data/bktitle.html
+  - id: mapi
+    name: MAPI (Microsoft Messaging API)
+    conforms: true
+    evidence: GroupWise MAPI is a published NDK component with its own SDK guide.
+    source: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwmapi/data/bktitle.html
+  - id: odma
+    name: ODMA (Open Document Management API)
+    conforms: true
+    evidence: GroupWise ODMA is listed as a component on the Novell Developer Kit A-Z index.
+    source: https://www.novell.com/developer/ndk/
+  - id: rest
+    name: REST architectural style
+    conforms: true
+    evidence: >-
+      "The GroupWise Administration API uses Representational State Transfer (REST) architectural principals."
+      220 resource paths over 357 operations across GET/PUT/POST/DELETE, content-negotiated between
+      application/json and application/xml.
+    source: https://www.novell.com/documentation/groupwise25/gwsdk_admin_rest_api/data/bookinfo.html
+  - id: oauth2
+    name: OAuth 2.0
+    conforms: false
+    evidence: >-
+      No authorization server, no /.well-known/oauth-authorization-server (404 on www.novell.com), and no
+      mention of OAuth in either SDK guide. Authentication is a plain-text credential or a trusted-application
+      shared secret.
+  - id: oidc
+    name: OpenID Connect
+    conforms: false
+    evidence: /.well-known/openid-configuration returns 404 on www.novell.com.
+  - id: rfc9457
+    name: RFC 9457 Problem Details for HTTP APIs
+    conforms: false
+    evidence: >-
+      Neither surface emits application/problem+json. See errors/novell-error-codes.yml for the envelopes
+      actually used.
+  - id: rfc8594
+    name: RFC 8594 Sunset header
+    conforms: false
+    evidence: >-
+      No Sunset or Deprecation response header is documented on either surface. Lifecycle is communicated out
+      of band through the Micro Focus Product Support Lifecycle page.
+  - id: openapi
+    name: OpenAPI
+    conforms: false
+    evidence: >-
+      No OpenAPI or Swagger document exists on any reachable Novell host. STEP 0b probes for /openapi.json,
+      /swagger.json, /apis.json and /llms.txt on www.novell.com all returned 404. The Admin REST API's own
+      machine-readable description is a WADL, and it is generated at runtime by the customer's installed
+      Administration Service (application.wadl on their own server) - never published by Novell.
+  - id: idempotency-key
+    name: Idempotency-Key header (draft-ietf-httpapi-idempotency-key)
+    conforms: false
+    evidence: No replay-protection mechanism is documented on either surface. See conventions/novell-conventions.yml.
+compliance_certifications:
+  published: false
+  note: >-
+    No trust center, SOC 2, ISO 27001, PCI, HIPAA or FedRAMP attestation is published on any Novell-branded
+    host. probe-security-programs.py returned trust=none. Any current attestation would belong to OpenText
+    and be published under the OpenText brand, not Novell's - so no Compliance pointer is emitted here.

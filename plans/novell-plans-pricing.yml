@@ -1,0 +1,38 @@
+generated: '2026-09-13'
+method: searched
+source: https://www.novell.com/developer/ndk/
+name: Novell API plans and pricing
+plan_count: 0
+plans: []
+description: >-
+  Novell publishes no API plans, tiers or pricing, and there is nothing to price: both API surfaces run on
+  software the customer has already licensed and hosts themselves, so access to the API is a property of the
+  product licence rather than a separate subscription. There is no metered API product, no free tier, no
+  developer sign-up and no rate card. The Novell Developer Kit itself was free to download under the Novell
+  Developer License Agreement ("Your use of these files is subject to the Novell Developer License Agreement
+  unless different license terms accompany the file itself"), which is stated on every NDK component page.
+model: bundled-with-product-licence
+metered: false
+free_tier: null
+signup: null
+signup_note: >-
+  No developer sign-up exists. The account surfaces on novell.com (Customer Center, My Profile, My Products)
+  are licence-management for existing customers and now redirect into the OpenText SAML SSO at
+  extlogin.opentext.com. Product licensing is sold through Volume Licensing and Buying Programs and through
+  partners, not self-serve.
+licence:
+  name: Novell Developer License Agreement
+  applies_to: NDK downloads
+  note: >-
+    Referenced by name on every NDK component page. The agreement text itself is not served from any live
+    Novell URL found in this pass.
+evidence:
+  - url: https://www.novell.com/developer/ndk/
+    status: 200
+    note: NDK A-Z index. No pricing of any kind; downloads are licence-gated but free of charge.
+  - url: https://www.novell.com/products/groupwise/
+    status: 302
+    note: GroupWise product page now redirects to www.opentext.com/products/listing, which refuses our crawler (444).
+  - url: https://www.novell.com/licensing/
+    status: 200
+    note: Volume Licensing and Buying Programs - product licensing, not API pricing.

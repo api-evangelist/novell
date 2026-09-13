@@ -1,0 +1,178 @@
+generated: '2026-09-13'
+method: searched
+source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i3i.html
+name: Novell API conventions
+description: >-
+  Cross-cutting runtime semantics for Novell's two callable surfaces, read from the GroupWise 25 SDK
+  documentation and the published Administration REST API reference. Both surfaces are customer-hosted and
+  both are older than the conventions agents now assume: there is no idempotency key, no rate-limit header,
+  no request-id header, no versioned URL path and no problem+json. What they do have is unusually explicit
+  session semantics, a documented cursor-based pagination model, and a real - though unbounded - set of
+  reversal operations.
+auth_style:
+  summary: >-
+    SOAP: plain-text credential or trusted-application shared secret in the request body, exchanged for a
+    session key. REST: administrator session via gw-api/system/login. No bearer tokens, no OAuth, no scopes.
+  detail: authentication/novell-authentication.yml
+idempotency:
+  coverage: none
+  mechanism: null
+  header: null
+  scope: []
+  note: >-
+    No replay-protection mechanism is documented on either surface. There is no Idempotency-Key header, no
+    client-supplied request identifier, no deduplication window and no conditional-write (If-Match / ETag)
+    support described anywhere in the GroupWise SDK documentation set or the Admin REST API reference. A
+    retried sendItemRequest sends a second message; a retried POST to a gw-api collection creates a second
+    object. An agent driving these APIs must implement its own at-most-once guard, and there is no
+    server-side facility to help it.
+  evidence:
+    - https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b8cg4px.html
+    - https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb/data/application.htm
+reversibility:
+  grade: documented
+  applicable: true
+  note: >-
+    Both surfaces ship real reversal operations, and for mailbox items GroupWise separates a soft delete from
+    a hard purge - which is the single most useful reversibility property an agent can have. What is NOT
+    published anywhere is a WINDOW: no retention period, no "restore within N days", no expiry on a retract
+    or an unaccept. Graded `documented` rather than `verified` for exactly that reason. No window is asserted
+    here, because inventing one is the error in this pipeline that could destroy a user's mail.
+  write_surfaces:
+    - surface: GroupWise mailbox item deletion
+      forward: removeItemRequest / removeItemsRequest
+      reversal: restoreItemRequest
+      window: null
+      window_source: null
+      note: >-
+        Removing an item moves it to the Trash rather than destroying it; restoreItemRequest brings it back.
+        Retention is governed by the customer's own GroupWise client options and post-office maintenance
+        settings, not by the API, so no window can be stated from the API documentation.
+    - surface: GroupWise permanent deletion
+      forward: purgeRequest / purgeDeletedItemsRequest
+      reversal: none
+      window: null
+      note: >-
+        IRREVERSIBLE. Purge is the hard delete that follows a soft delete; no restore operation covers it.
+        This is the one-way door on the mailbox surface and an agent should treat it as terminal.
+    - surface: Sent message
+      forward: sendItemRequest
+      reversal: retractRequest
+      window: null
+      note: >-
+        GroupWise retract pulls a sent message back from recipient mailboxes - a genuine reversal, and one of
+        the few in any mail API. Its effectiveness depends on whether recipients have already opened or moved
+        the item; no bound is documented.
+    - surface: Appointment / task acceptance
+      forward: acceptRequest, completeRequest
+      reversal: unacceptRequest, uncompleteRequest
+      window: null
+    - surface: Archive
+      forward: archiveRequest
+      reversal: unarchiveRequest
+      window: null
+    - surface: Read / private status
+      forward: markReadRequest, markPrivateRequest
+      reversal: markUnReadRequest, markUnPrivateRequest
+      window: null
+    - surface: GroupWise mailbox and restore area (administration)
+      forward: n/a - restore is the operation
+      reversal: >-
+        gw-api/domains/{domain}/postoffices/{postoffice}/users/{user}/restoremailbox,
+        .../resources/{resource}/restoremailbox, .../restorearea, gw-api/system/restoreareas
+      window: null
+      note: >-
+        The Admin REST API exposes mailbox restore from a restore area, plus a read-only "Recover" connection
+        to a backup copy of a domain database (gw-api/system/login/{path}). Whether a given mailbox is
+        recoverable depends on the customer's own backup regime.
+    - surface: Asynchronous administration jobs
+      forward: any operation scheduled via AsyncApi.run()
+      reversal: DELETE gw-api/async/{id}
+      window: 60 seconds after completion
+      window_source: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb/data/application.htm
+      note: >-
+        The ONLY stated window on either surface, and it bounds cleanup rather than effect. DELETE on a
+        running job requests cancellation from the executing thread; a completed job stays in the list for
+        REMOVE_DELAY (documented as 60 seconds) and is then auto-removed. Cancelling a running job does not
+        undo work already performed by it.
+dry_run_mode:
+  supported: false
+  note: >-
+    No preview, simulate or validate-only mode is documented. The closest published facility is the read-only
+    Recover connection to a backup domain database, which is a separate authentication mode rather than a
+    dry-run flag. Two test endpoints exist for address configuration only -
+    gw-api/domains/{domain}/customaddresses/test and gw-api/system/customaddresses/test.
+pagination:
+  style: cursor
+  surface: novell:groupwise-web-services-soap
+  operations:
+    - createCursorRequest
+    - positionCursorRequest
+    - readCursorRequest
+    - destroyCursorRequest
+  note: >-
+    GroupWise Web Services paginates mailbox reads with an explicit server-side cursor that the client
+    creates, positions (forward and backward), reads from and then destroys. streamedSearchRequest and
+    getDeltasRequest / getDeltaInfoRequest cover streamed search and incremental sync respectively.
+    Attachments are streamed separately. The Admin REST API documents no pagination at all - collection
+    resources such as gw-api/list/{type} return the whole set, filtered by query parameter.
+  response_fields: not documented
+filtering:
+  rest:
+    style: query-parameter attribute match
+    example: /gw-api/list/{type}?attribute=value
+    note: >-
+      "Attribute filtering is supported using this query". Several resources also accept an ?attrs parameter
+      to select which attributes are returned - a sparse-fieldset facility in all but name.
+    source: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb/data/application.htm
+  soap:
+    style: filter and view strings
+    note: >-
+      Section 1.17 of the Web Services guide covers Filters and Views, including filtering on different item
+      types and the message/RTF view string.
+    source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i44.html
+content_negotiation:
+  rest: application/json or application/xml per resource
+  soap: text/xml or application/soap+xml, charset UTF-8 only - any other charset passed to the POA is ignored
+versioning:
+  scheme: product-release
+  in_url: false
+  note: >-
+    Neither surface versions its URL or accepts a version header. The contract is pinned to the GroupWise
+    product release - the SDK guides are published per release (groupwise25, groupwise18, groupwise2014r2,
+    groupwise2012) and the docs mark features with the GroupWise version they first worked in ("the features
+    in GroupWise Web Services work with GroupWise 8 and later versions"). The SOAP Post Office Agent
+    advertises its build in the HTTP Server response header, e.g. "Windows GroupWise POA 12.0.0".
+  detail: lifecycle/novell-lifecycle.yml
+request_tracing:
+  request_id_header: null
+  note: >-
+    No correlation or request-id header is documented. The published debugging guidance (Section 1.7, Debugging
+    Tips) is to run a TCP trace utility against the POA.
+rate_limit_signaling:
+  headers: []
+  status_on_exhaustion: null
+  note: See rate-limits/novell-rate-limits.yml - no limits and no headers are published.
+connection_semantics:
+  transport: HTTP/1.1 with persistent connections
+  http_keepalive_timeout_minutes: 30
+  session_timeout_minutes: 30
+  keepalive_operation: getTimestampRequest with the noop parameter
+  note: >-
+    Two independent 30-minute timers - the HTTP connection and the GroupWise SOAP session. Most frameworks
+    silently re-establish the HTTP connection; the SOAP session is the one that will actually break a
+    long-running agent, and the docs explicitly tell developers to test behaviour after a timeout.
+  source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i3y.html
+redirection:
+  documented: true
+  note: >-
+    loginRequest against the wrong Post Office Agent returns status code 59923 plus a redirectToHost element
+    carrying the correct ipAddress and port. Clients are told to retry against that host and to cache the
+    mapping. This is a mandatory discovery step in any multi-post-office GroupWise system, not an edge case.
+  source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i42.html
+error_envelope:
+  detail: errors/novell-error-codes.yml
+  summary: >-
+    SOAP returns HTTP 200 with a body-level <status><code/><description/></status>; the Admin REST API uses
+    conventional HTTP status codes but publishes no status table, and returns 200 on partially-failed bulk
+    moves.

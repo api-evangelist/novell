@@ -1,0 +1,91 @@
+generated: '2026-09-13'
+method: searched
+source: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwwebservices/data/ai4okjn.html
+name: Novell GroupWise SDK change log
+description: >-
+  Novell publishes no product-wide API changelog and no dated release-notes feed. What it does publish - and
+  has published continuously since 2007 - is a per-guide Revision History appendix inside each SDK document,
+  listing every documentation release in reverse chronological order with the specific methods, elements and
+  sections added or changed. That is a genuine dated changelog for the SOAP contract, and it is the only one
+  either surface has. It is recorded here as-is. Note the discontinuity: the GroupWise 25 Web Services guide
+  DROPPED the Revision History section entirely (its table of contents is Overview, Methods, Schema Elements
+  and nothing else), so the last dated API change log entry Novell published is June 2013.
+scheme: per-document revision history
+current_version: GroupWise 25
+last_dated_entry: '2013-06'
+feed: null
+rss: null
+sources:
+  - name: GroupWise SDK Web Services - Revision History
+    url: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwwebservices/data/ai4okjn.html
+    status: 200
+    entries_listed: 8
+  - name: GroupWise SDK Web Services Events - Revision History
+    url: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwwebevents/data/ai4okjn.html
+  - name: GroupWise SDK Web Services - Readme
+    url: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwwebservices_readme/data/gwsdk_gwwebservices_readme.html
+    status: 200
+    dated: '2012-11'
+  - name: GroupWise 25 Web Services (SOAP) guide
+    url: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/bktitle.html
+    status: 200
+    note: Current guide - carries no Revision History section.
+entries:
+  - date: '2013-06'
+    version: GroupWise Web Services documentation, June 2013
+    breaking: false
+    additions: []
+    highlights:
+      - Clarified the message/RTF view string in Section 1.17.3, Views.
+  - date: '2012-11'
+    version: GroupWise Web Services documentation, November 2012
+    breaking: true
+    highlights:
+      - Reviewed and updated for use with GroupWise 2012.
+      - Removed the username element from the TrustedApplication element because it is no longer valid.
+      - Added the mainVersion element to the Proxy element.
+      - Updated the links for TCP trace utilities in Section 1.7.1, Trace Utilities.
+    breaking_note: >-
+      The TrustedApplication username element removal is a contract change to the highest-privilege
+      authentication path on the API.
+  - date: '2011-10'
+    version: GroupWise Web Services documentation, October 2011 (GroupWise 2012)
+    breaking: false
+    additions:
+      - archiveRequest
+      - unarchiveRequest
+      - createNotifyRequest
+      - modifyNotifyRequest
+      - removeNotifyRequest
+      - getNotifyListRequest
+      - getArchiveItemsRequest
+      - getContactHistoryFilterRequest
+      - moveItemRequest
+      - moveItemsRequest
+      - resendRequest
+      - streamedSearchRequest
+    highlights:
+      - Largest single release in the history - added twelve methods plus new schema elements including CalendarPublish, CalendarPublishRange, CalHost, CategoryFlags, FolderFlags, GeneralAccount, HTMLImages and DiskSpaceUsage.
+      - Added new sections for Stubbed Items, Streaming Attachments, ContactNotes on a Contact, Display Settings and Item Modification.
+      - Extended getItemsRequest, getUnreadRequest, getUserListRequest, getFreeBusyRequest, loginRequest, createCursorRequest, positionCursorRequest and acceptShareRequest.
+  - date: '2008-12'
+    version: GroupWise Web Services documentation, December 2008
+  - date: '2008-05'
+    version: GroupWise Web Services documentation, May 2008
+  - date: '2007-08'
+    version: GroupWise Web Services documentation, August 2007
+  - date: '2007-06'
+    version: GroupWise Web Services documentation, June 2007
+  - date: '2007-02'
+    version: GroupWise Web Services documentation, February 2007
+gaps:
+  - what: No changelog for the Administration REST API
+    note: >-
+      Neither the GroupWise 2014 nor the GroupWise 25 Administration REST API guide carries a Revision
+      History section. The base-URL port change from 9999 to 9710 between those two releases - a breaking
+      change - is discoverable only by reading both guides side by side.
+  - what: No dated entries after June 2013
+    note: >-
+      Twelve years of GroupWise releases (2014, 2014 R2, 18, 25) have shipped since the last dated API
+      changelog entry. The SDK guides were re-published per release but the change history was not carried
+      forward.

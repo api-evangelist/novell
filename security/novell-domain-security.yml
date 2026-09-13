@@ -1,0 +1,27 @@
+generated: '2026-09-13'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: www.novell.com
+  https: true
+  tls_version: TLSv1.2
+  cert_expires: Oct 30 23:59:59 2026 GMT
+  hsts: null
+- host: www.microfocus.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Dec 11 23:59:59 2026 GMT
+  hsts: null
+domains:
+- domain: novell.com
+  dnssec: true
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+- domain: microfocus.com
+  dnssec: true
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine

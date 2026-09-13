@@ -1,0 +1,108 @@
+generated: '2026-09-13'
+method: searched
+source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i3i.html
+name: Novell API authentication
+description: >-
+  Authentication profile for Novell's two callable API surfaces, read from the GroupWise 25 SDK documentation
+  still served on www.novell.com. Both surfaces are customer-hosted and both authenticate against the
+  customer's own GroupWise system - there is no Novell-operated identity provider, no API key issuance, no
+  OAuth authorization server and no OpenID Connect discovery document anywhere on the Novell domain (every
+  /.well-known/ probe 404d; see well-known/novell-well-known.yml). The strongest credential on offer is the
+  GroupWise Trusted Application key, which is a system-wide impersonation credential minted by the customer's
+  own GroupWise administrator.
+  DERIVED FROM DOCUMENTATION, NOT A SPEC: no OpenAPI, WSDL or other machine-readable contract could be
+  obtained for either surface, so there is no securitySchemes block behind this file.
+oauth2: false
+openid_connect: false
+mutual_tls: false
+api_keys_issued_by_provider: false
+schemes:
+  - id: groupwise-soap-plaintext
+    api: novell:groupwise-web-services-soap
+    type: credential-in-body
+    transport: SOAP over HTTP or HTTPS
+    description: >-
+      loginRequest carries a types:auth element of type PlainText containing the GroupWise username and
+      password. There is no separate authorization header; the credential travels inside the SOAP body.
+    example_shape: |
+      <loginRequest>
+        <types:auth types:PlainText>
+          <username>...</username>
+          <password>...</password>
+        <auth/>
+        <application>...</application>
+      </loginRequest>
+    session:
+      mechanism: session key
+      description: >-
+        loginResponse returns a session key that every subsequent method must carry for the life of the
+        session. loginRequest must be the first call; no other method may be invoked before it.
+      idle_timeout_minutes: 30
+      keepalive: >-
+        getTimestampRequest accepts a noop parameter that holds both the GroupWise session and the HTTP
+        keep-alive connection open.
+      termination: logoutRequest
+    transport_security:
+      https_available: true
+      https_default: false
+      note: >-
+        HTTPS is supported but must be explicitly enabled per POA ("each POA needs to have SSL connections
+        enabled for SOAP"). Because the password is in the request body, a POA left on plain HTTP transmits
+        GroupWise credentials in cleartext. This is a deployment decision made by the customer, not a
+        property of the protocol.
+    source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i3q.html
+  - id: groupwise-trusted-application
+    api: novell:groupwise-web-services-soap
+    type: shared-secret impersonation
+    description: >-
+      A Trusted Application logs in to ANY account in the GroupWise system without knowing that user's
+      password. The GroupWise administrator creates a trusted application name and key and decides which
+      applications may use it; the application passes the name and key to loginRequest in place of a user
+      credential.
+    blast_radius: >-
+      System-wide. A trusted application key grants mailbox read and write access to every account in the
+      GroupWise system. It is the highest-privilege credential this API has and there is no documented scope,
+      audience or per-mailbox restriction on it.
+    scopes: none
+    rotation: >-
+      Not documented. Revocation is administrative - the GroupWise administrator removes or disables the
+      trusted application entry.
+    source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i43.html
+    reference: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwtapp/data/bktitle.html
+  - id: groupwise-admin-rest-login
+    api: novell:groupwise-administration-rest-api
+    type: session
+    description: >-
+      The Admin REST API exposes gw-api/system/login, gw-api/system/login/{path} and gw-api/system/logout as
+      its session endpoints, and the shipped sample code is configured with a URL, an admin user name and a
+      password in src/main/resources/config.properties. The credential is therefore a GroupWise administrator
+      account on the customer's own system.
+    per_admin_scoping:
+      documented: true
+      note: >-
+        gw-api/async filters the job list to jobs submitted by the admin making the request, which confirms
+        the service tracks caller identity per administrator rather than treating all callers as one
+        principal.
+    recover_connection:
+      note: >-
+        gw-api/system/login/{path} creates a read-only "Recover" connection to a backup copy of a domain
+        database - a distinct, deliberately read-only authentication mode.
+    scopes: none
+    source: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb/data/application.htm
+  - id: edirectory-ldap-bind
+    api: novell:dsml-for-edirectory-soap
+    type: ldap-bind
+    description: >-
+      DSML for eDirectory is a servlet the customer deploys in front of their own eDirectory tree; the
+      identity that matters is the eDirectory LDAP bind behind it. Simple bind and SASL are eDirectory
+      features, not properties Novell documents at the DSML layer.
+    source: https://www.microfocus.com/documentation/edirectory-developer-documentation/dsml-for-edirectory-soap/
+discovery_documents:
+  openid_configuration: null
+  oauth_authorization_server: null
+  oauth_protected_resource: null
+  note: >-
+    All three probed 404 on www.novell.com and are unreachable on the apex (TLS SAN mismatch). The only
+    identity provider on any Novell-branded host is extlogin.opentext.com, an OpenText SAML 2.0 SSO endpoint
+    that fronts support.novell.com and the Micro Focus support portal - it gates OpenText customer support,
+    not these APIs.

@@ -1,0 +1,127 @@
+generated: '2026-09-13'
+method: searched
+source: https://www.novell.com/documentation/nwec/nwec/data/front.html
+name: Novell error code registry and API error envelopes
+description: >-
+  Novell does not publish RFC 9457 problem+json - both of its callable surfaces predate it. What it publishes
+  instead is a genuine, still-live error-code registry: the Novell Error Codes Reference Guide, a 22-family
+  catalogue in which every code carries a number (hex or decimal), a description, the source subsystem, an
+  explanation, and where known a possible cause and a remedial action. That is the non-payments sibling of a
+  decline-code reference, and it is the authoritative lookup for anything a GroupWise or eDirectory API call
+  returns. This file records the registry and the two API-level error envelopes; it does not restate the
+  thousands of individual codes, which are served page-by-page at the URLs below.
+registry:
+  name: Novell Error Codes Reference Guide
+  url: https://www.novell.com/documentation/nwec/nwec/data/front.html
+  http_status: 200
+  pdf: https://www.novell.com/documentation/nwec/pdfdoc/nwec/nwec.pdf
+  all_codes_index: https://www.novell.com/documentation/nwec/nwec/data/al29t28.html
+  entry_shape:
+    - Error code number (hexadecimal or decimal)
+    - Description
+    - Source (the subsystem that raised it)
+    - Explanation
+    - Possible cause (optional)
+    - Action (optional)
+  families:
+    - name: GroupWise Engine Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/a3wxgq9.html
+      note: >-
+        Underlies every GroupWise component - client, agents and ConsoleOne snap-ins - so a GroupWise SOAP or
+        Admin REST failure most often resolves here. Grouped by leading nibble: 0xxx, 8xxx, 9xxx, Axxx, Bxxx,
+        Cxxx, Dxxx, Exxx, Fxxx.
+    - name: eDirectory and NDS Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/al39n9y.html
+      note: The lookup for LDAP and DSML-for-eDirectory failures.
+    - name: Client Services Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/al2pcir.html
+    - name: DHost Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/al2rlkv.html
+    - name: DirXML Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/al2rpz6.html
+    - name: NCP Engine Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/al35lpw.html
+    - name: Novell Modular Authentication Services Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/al3r5bb.html
+    - name: Novell Certificate Server Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/al45xvx.html
+    - name: Secure Authentication Services Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/al47ymm.html
+    - name: Novell SecretStore Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/akw45uu.html
+    - name: Novell SecureLogin Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/akx0nmu.html
+    - name: Novell Storage Services Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/al3s3ui.html
+    - name: Novell Cluster Services Error Code List
+      url: https://www.novell.com/documentation/nwec/nwec/data/but0c7x.html
+    - name: Novell Licensing Services Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/al3r00f.html
+    - name: Novell International Cryptographic Infrastructure (NICI) Error Codes
+      url: https://www.novell.com/documentation/nwec/nwec/data/al2oa6s.html
+  family_count: 22
+  registry_caveat: >-
+    The guide states plainly that it is not exhaustive - it lists the codes for which a solution was readily
+    available from Novell engineers and testers. An unlisted code is expected, not a documentation defect.
+envelopes:
+  - api: novell:groupwise-web-services-soap
+    format: soap-status-element
+    media_type: text/xml
+    transport_status: >-
+      HTTP 200 is returned for application-level failures; the outcome is carried in the body, not the status
+      line. An agent that branches on the HTTP status alone will read every GroupWise SOAP error as success.
+    shape: |
+      <status>
+        <code>59923</code>
+        <description>Redirect user to different PO.</description>
+      </status>
+    fields:
+      - name: code
+        type: integer
+        note: Numeric GroupWise status code. Resolves against the GroupWise Engine Error Codes family above.
+      - name: description
+        type: string
+        note: Short human-readable reason.
+    documented_codes:
+      - code: 59923
+        title: Redirect user to different PO
+        meaning: >-
+          loginRequest reached a Post Office Agent that does not own this user. The loginResponse carries a
+          redirectToHost element with the correct ipAddress and port.
+        action: >-
+          Retry loginRequest against the ipAddress and port in redirectToHost, and cache that pairing so the
+          redirect is not needed again. Requires the SOAP port to be configured in ConsoleOne for every POA -
+          a POA configured only on the command line or in a startup file cannot be discovered this way.
+        source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i42.html
+    codes_documented: 1
+    full_code_list_note: >-
+      The GroupWise Web Services SDK archive shipped an ErrorCodes directory alongside its WSDL and schemas.
+      That archive (novell-gwsoap-devel-2013.01.15.zip) was only ever distributed from
+      ftp://sdk.provo.novell.com, a host that no longer resolves, and four plausible HTTP mirrors under
+      www.novell.com/developer/ return 404. The complete SOAP status-code list is therefore not publicly
+      obtainable; the Error Codes Reference Guide above is the substitute.
+  - api: novell:groupwise-administration-rest-api
+    format: http-status
+    media_type: application/json, application/xml
+    transport_status: >-
+      Conventional HTTP semantics. The published reference describes outcomes in prose per operation - for
+      example a client-update trigger that "responds NO_CONTENT on success or various error codes on failure"
+      - rather than enumerating a status table.
+    partial_success:
+      documented: true
+      note: >-
+        Bulk user moves return HTTP 200 OK even when some moves failed. The response entity carries the count
+        of successful moves plus a collection of per-user errors, and the caller is told to compare that count
+        against the number of users submitted to decide whether the whole operation succeeded. A 200 here is
+        not a guarantee of completion.
+      source: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb/data/application.htm
+    codes_documented: 0
+    full_code_list_note: >-
+      No status-code table is published in the guide. The authoritative per-resource error documentation is
+      the WADL-generated listing served by the customer's own Administration Service at
+      https://{server_address}:9710/gwadmin-service/static/apidocs/index.html.
+rfc9457:
+  conforms: false
+  evidence: >-
+    Neither surface emits application/problem+json. GroupWise Web Services predates RFC 7807 by roughly a
+    decade; the Admin REST API was designed in 2013, a year before RFC 7807 was published.

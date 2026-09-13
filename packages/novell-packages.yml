@@ -1,0 +1,120 @@
+generated: '2026-09-13'
+method: searched
+source: https://www.novell.com/developer/ndk/
+name: Novell client libraries and SDKs
+description: >-
+  First-party Novell client libraries located on public package registries, plus the registry-less developer
+  kits the Novell Developer Kit (NDK) A-Z index still lists. Registries swept 2026-09-13: npm, PyPI, Maven
+  Central, NuGet, RubyGems, crates.io, Packagist. Only two first-party packages exist on any registry, and
+  both are abandoned - the newest first-party release Novell ever published to a registry is 2014-02-12. Every
+  remaining NDK component is distributed as a downloadable archive and all of those download hosts are now
+  dead (ftp://sdk.provo.novell.com does not resolve; the HTTP archive paths under www.novell.com/developer/
+  return 404).
+summary:
+  registry_packages: 3
+  official_first_party: 2
+  newest_first_party_release: '2014-02-12'
+  registry_less_kits: 5
+packages:
+  - name: com.novell.ldap:jldap
+    registry: maven
+    official: true
+    language: java
+    url: https://central.sonatype.com/artifact/com.novell.ldap/jldap
+    docs: https://www.microfocus.com/documentation/edirectory-developer-documentation/ldap-classes-for-java/
+    version: '2009-10-07'
+    published: '2013-02-19'
+    note: >-
+      Novell LDAP Classes for Java (JLDAP). The only version on Maven Central; the version string is itself a
+      date, and maven-metadata.xml records lastUpdated 2013-02-26. The NDK page it documents now 301s to the
+      Micro Focus eDirectory developer documentation. Unmaintained for over a decade.
+    verified: https://repo1.maven.org/maven2/com/novell/ldap/jldap/maven-metadata.xml
+  - name: Novell.Directory.Ldap
+    registry: nuget
+    official: true
+    language: csharp
+    url: https://www.nuget.org/packages/Novell.Directory.Ldap
+    docs: https://www.microfocus.com/documentation/edirectory-developer-documentation/ldap-libraries-for-c-sharp/
+    version: 2.2.1
+    published: '2014-02-12'
+    note: >-
+      LDAP Libraries for C#. Registry metadata names the author as "Novell Inc." and points projectUrl at
+      https://www.novell.com/developer/ndk/ldap_libraries_for_c_sharp.html, so first-party authorship is
+      unambiguous. Exactly one version has ever been published. This is the newest first-party Novell release
+      on any package registry.
+    verified: https://api.nuget.org/v3/registration5-semver1/novell.directory.ldap/index.json
+  - name: Novell.Directory.Ldap.NETStandard
+    registry: nuget
+    official: false
+    language: csharp
+    url: https://www.nuget.org/packages/Novell.Directory.Ldap.NETStandard
+    repository: https://github.com/dsbenghe/Novell.Directory.Ldap.NETStandard
+    version: 4.0.0
+    published: '2025-03-02'
+    note: >-
+      Community continuation of the Novell C# LDAP library, maintained by dsbenghe. The registry author field
+      reads "Novell,dsbenghe" because it inherits Novell's copyright, but projectUrl is a third-party GitHub
+      repository and no Novell host references it - recorded as official:false. Listed because it is the only
+      live descendant of a Novell client library, and is the package a current integrator would actually use.
+registry_less_kits:
+  - name: GroupWise Web Service (SOAP) SDK
+    distribution: archive
+    url: https://www.novell.com/developer/ndk/groupwise/groupwise_web_service_(soap).html
+    version: '2013.01.15'
+    published: '2013-01-15'
+    note: >-
+      Published as novell-gwsoap-devel-2013.01.15.zip. Version and date are read from the filename on the live
+      NDK page. The archive contains the WSDL and schema files for the SOAP surface. The only download link is
+      ftp://sdk.provo.novell.com/ndk/gwsoap/builds/cross_platform/ and that host no longer resolves; four
+      plausible HTTP mirrors under www.novell.com/developer/ all return 404. The contract is therefore
+      documented but not obtainable.
+  - name: DSML for eDirectory (SOAP)
+    distribution: archive
+    url: https://www.microfocus.com/documentation/edirectory-developer-documentation/dsml-for-edirectory-soap/
+    version: '2006.02.22-1'
+    published: '2006-02-22'
+    note: >-
+      Published as novell-dsml-devel-2006.02.22-1cross_platform in tar.gz / zip / exe / i586.rpm form. Every
+      download link on the page 404s.
+  - name: GroupWise Administration SDK sample code
+    distribution: archive
+    url: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb_readme/data/gwsdk_gwadminweb_readme.html
+    version: null
+    published: null
+    note: >-
+      AdminSDK-SampleCode.zip, referenced by the Admin API readme. No version is stated anywhere on the page
+      and no download link is given - the readme says the SDK installs with the GroupWise agent software.
+      Recorded as checked-and-unknown rather than omitted.
+  - name: eDirectory Developer Suite
+    distribution: archive
+    url: https://www.microfocus.com/documentation/edirectory-developer-documentation/
+    version: null
+    published: null
+    note: >-
+      Bundle of the eDirectory C/Java/C# libraries. The NDK index still links it; the page now 301s to Micro
+      Focus, which does not state a version or date.
+  - name: Novell Developer Suite for Java
+    distribution: archive
+    url: https://www.novell.com/developer/ndk/novell_developer_suite_for_java.html
+    version: null
+    published: null
+    note: >-
+      Listed on the live NDK A-Z index. No version or release date is published on the page.
+negative_results:
+  - registry: npm
+    query: novell
+    result: >-
+      No first-party package. The closest hits are third-party - groupwise@0.6.0 (2015-05-17), "A simple SOAP
+      client for Novell Groupwise", and lderp-edir@1.2.0, an eDirectory extension for a community LDAP client.
+  - registry: pypi
+    query: novell-ldap, python-novell
+    result: 404 on both. No first-party Python client was ever published.
+  - registry: rubygems
+    query: novell
+    result: No Novell-authored gem; all matches are unrelated Japanese web-novel tooling.
+  - registry: crates.io
+    query: novell
+    result: No Novell-authored crate; all matches are unrelated "novel" string collisions.
+  - registry: packagist
+    query: novell
+    result: No Novell-authored package.

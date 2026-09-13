@@ -1,0 +1,136 @@
+generated: '2026-09-13'
+method: searched
+source: https://www.microfocus.com/lifecycle/
+name: Novell API lifecycle
+description: >-
+  Versioning, deprecation and support posture for Novell's published API surfaces. Novell's own corporate
+  lifecycle ended in stages - acquired by The Attachmate Group in 2011, absorbed into Micro Focus with the
+  2014 Attachmate acquisition, and carried into OpenText when OpenText bought Micro Focus in 2023 - and the
+  brand is retired. The PRODUCT lifecycle did not end with it: GroupWise is still shipping, its SDK
+  documentation set is published per release on www.novell.com up to GroupWise 25, and both API surfaces are
+  still the supported integration path for it. The developer PROGRAM, by contrast, is dead: the NDK download
+  hosts no longer resolve and the last first-party SDK release on any package registry is 2014-02-12.
+corporate:
+  status: brand-retired
+  operator_of_record: Open Text Corporation
+  evidence: >-
+    The TLS certificate served for novell.com is CN=redirector.novell.com, O=Open Text Corporation. Every
+    novell.com root path 301s to www.microfocus.com/en-us/products/novell/overview and on to
+    www.opentext.com/about/brands/microfocus, which lists "Attachmate Group (Attachmate, NetIQ, Novell, SUSE)"
+    among the companies Micro Focus had acquired before OpenText acquired Micro Focus in 2023.
+  chain:
+    - event: Acquired by The Attachmate Group
+      year: 2011
+    - event: Attachmate Group acquired by Micro Focus
+      year: 2014
+    - event: Micro Focus acquired by OpenText
+      year: 2023
+versioning:
+  scheme: product-release
+  in_url: false
+  version_header: null
+  note: >-
+    API versions track GroupWise product releases rather than the API itself. Each release publishes its own
+    SDK guide under www.novell.com/documentation/<release>/, and feature availability is stated against the
+    product version ("the features in GroupWise Web Services work with GroupWise 8 and later versions"). The
+    POA advertises its build in the HTTP Server response header, e.g. "Windows GroupWise POA 12.0.0".
+  published_release_docs:
+    - release: GroupWise 25
+      url: https://www.novell.com/documentation/groupwise25/
+      status: 200
+      current: true
+    - release: GroupWise 18
+      url: https://www.novell.com/documentation/groupwise18/
+      status: 200
+    - release: GroupWise 2014 R2
+      url: https://www.novell.com/documentation/groupwise2014r2/
+      status: 200
+    - release: GroupWise 2012 (SDK set)
+      url: https://www.novell.com/documentation/developer/groupwise_sdk/
+      status: 200
+deprecation:
+  policy_published: true
+  policy_url: https://www.microfocus.com/lifecycle/
+  policy_http_status: 200
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    A real, phased product-support lifecycle policy is published - Current Maintenance, then Extended Support
+    available for two years at the end of Current Maintenance (chargeable), with technical support, critical
+    patches and new releases per roadmap defined per phase. It is a PRODUCT lifecycle, not an API lifecycle:
+    it names no API version, no operation and no sunset date for either surface, and neither surface emits an
+    RFC 8594 Sunset or Deprecation response header.
+  deprecated_operations: []
+  deprecated_operations_note: >-
+    None could be derived - there is no machine-readable contract to read a deprecated flag from. The SDK
+    guides mark features by the product version they first appeared in, not by removal.
+  observed_removals:
+    - what: GroupWise Administration REST API resource listing copy
+      note: >-
+        The GroupWise 25 Admin REST API guide links a local copy of the full resource documentation at
+        ../../gwsdk_rest_api/ and that path returns 404. The only surviving complete listing is the
+        GroupWise 2014-era copy at gwsdk_gwadminweb/data/application.htm, which is still served (200,
+        615 KB). Current callers are directed to the listing their own server generates at
+        https://{server_address}:9710/gwadmin-service/static/apidocs/index.html.
+      evidence: https://www.novell.com/documentation/groupwise25/gwsdk_rest_api/
+      status: 404
+    - what: Admin REST API port change
+      note: >-
+        The GroupWise 2014 guide documents the Administration Service on port 9999; the GroupWise 25 guide
+        documents 9710. A breaking change to the base URL, published only as differing prose in two release
+        guides - no changelog entry, no deprecation notice.
+    - what: NetWare platform support
+      note: >-
+        GroupWise Web Services ran on Linux, NetWare and Windows; the docs record NetWare as "Not available
+        for GroupWise 2012".
+    - what: TrustedApplication username element
+      note: Removed as no longer valid in the November 2012 revision.
+support:
+  developer_forums:
+    url: https://forums.novell.com/
+    status: tls-error
+    note: >-
+      The NDK pages still link per-component developer forums (GroupWise SOAP is forum 813). The host no
+      longer presents a certificate valid for forums.novell.com, so it cannot be reached over HTTPS.
+  support_portal:
+    url: https://www.novell.com/support/
+    status: 302
+    note: Redirects into the OpenText SAML SSO at extlogin.opentext.com - customer-only.
+  knowledgebase:
+    url: https://www.novell.com/support/kb/
+    status: 302
+    note: Redirects to portal.microfocus.com customer search.
+  community:
+    url: https://community.opentext.com/
+    status: 200
+    note: The Novell Cool Solutions community now resolves to the OpenText community.
+status_page:
+  present: false
+  note: >-
+    No status page exists and none could exist in a useful sense - both APIs run on infrastructure the
+    customer owns and operates (their own Post Office Agent, their own Administration Service). There is no
+    Novell-operated endpoint whose availability could be reported. Recorded as not-applicable rather than
+    missing; no StatusPage pointer is emitted.
+sla:
+  published: false
+  note: >-
+    No API SLA. Support entitlements are sold as maintenance and support plans under the product lifecycle
+    policy above.
+developer_program:
+  status: dead
+  evidence:
+    - what: NDK distribution host
+      url: ftp://sdk.provo.novell.com/
+      status: nxdomain
+    - what: NDK archive mirrors under www.novell.com/developer/
+      status: 404
+    - what: download.novell.com
+      status: 503
+    - what: developer.novell.com
+      status: nxdomain
+    - what: Newest first-party SDK release on any package registry
+      value: '2014-02-12'
+      url: https://www.nuget.org/packages/Novell.Directory.Ldap
+  note: >-
+    The Novell Developer Kit A-Z index and every component page are still served and readable, but nothing
+    on them can be downloaded. The documentation outlived the distribution.

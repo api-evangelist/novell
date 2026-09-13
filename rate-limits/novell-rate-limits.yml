@@ -1,0 +1,44 @@
+generated: '2026-09-13'
+method: searched
+source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i3y.html
+name: Novell API rate limits
+limit_count: 0
+limits: []
+headers: []
+status_on_exhaustion: null
+retry_after: false
+description: >-
+  No rate limits are published for either Novell API surface, and none are enforced by Novell - both APIs are
+  served by software running on the customer's own hardware (the GroupWise Post Office Agent and the
+  GroupWise Administration Service), so throughput is bounded by that deployment, not by a vendor quota.
+  Nothing in the GroupWise 25 SDK documentation set or the Administration REST API reference mentions a
+  request ceiling, a quota, a burst allowance, a 429 response or any X-RateLimit-* / RateLimit-* /
+  Retry-After header. An honest zero rather than an unmeasured one.
+runtime_constraints_instead:
+  - name: SOAP session timeout
+    value: 30 minutes idle
+    note: >-
+      The GroupWise SOAP session expires after 30 minutes of inactivity. getTimestampRequest with the noop
+      parameter keeps it alive. This is the constraint that will actually break a long-running agent.
+    source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i3y.html
+  - name: HTTP keep-alive timeout
+    value: 30 minutes
+    note: >-
+      Independent of the session timer. Most frameworks re-establish it transparently; the docs tell
+      developers to test that their application behaves correctly after a timeout.
+  - name: Async job retention
+    value: 60 seconds after completion (REMOVE_DELAY)
+    note: >-
+      Administration REST API async jobs stay queryable for 60 seconds after completing, then auto-remove.
+      A poller slower than that loses the result.
+    source: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb/data/application.htm
+  - name: Charset
+    value: UTF-8 only
+    note: Any other charset passed to the POA is ignored; responses are always UTF-8.
+evidence:
+  - url: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b7m3i3y.html
+    status: 200
+    note: HTTP Connections section - the only throughput-adjacent documentation on the SOAP surface.
+  - url: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb/data/application.htm
+    status: 200
+    note: Full Admin REST reference, 220 resources - no rate-limit or quota language anywhere in it.

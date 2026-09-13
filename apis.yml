@@ -1,20 +1,186 @@
 aid: novell
 name: Novell
-description: 'Novell is a company surfaced via the API Evangelist harvest backlog (source: absent-parent)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Novell, Inc. was a Provo, Utah network-software company best known for NetWare, eDirectory, GroupWise and ZENworks.
+  It was acquired by The Attachmate Group in 2011, folded into Micro Focus with the 2014 Attachmate acquisition, and
+  passed to OpenText when OpenText bought Micro Focus in 2023. The Novell corporate brand is retired and novell.com is
+  now an OpenText-operated redirector, but a large part of the Novell developer surface is still served on
+  www.novell.com and is not merely archival: the Novell Developer Kit (NDK) A-Z index, the eDirectory developer kits
+  (which now 301 to microfocus.com), and the GroupWise SDK documentation set published per release right up to
+  GroupWise 25. Two callable API surfaces are documented there - the GroupWise Administration REST API (220 resource
+  paths, 357 operations, served by the customer's own GroupWise Administration Service on port 9710) and the GroupWise
+  Web Services SOAP protocol against the Post Office Agent (96 documented methods on port 7191). Both are
+  customer-hosted, not SaaS: there is no Novell-operated endpoint, no key to obtain and no sign-up. No machine-readable
+  contract is obtainable - a WSDL is referenced by name but shipped only inside SDK archives on hosts that no longer
+  resolve, and the Admin API's WADL is generated at runtime on the customer's own server. The documentation outlived
+  the distribution.
+image: https://www.novell.com/favicon.ico
 url: https://raw.githubusercontent.com/api-evangelist/novell/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:absent-parent
-x-tier: stub
-x-tier-reason: harvest
-specificationVersion: '0.20'
+specificationVersion: '0.21'
+position: Producing
 created: '2026-09-13'
 modified: '2026-09-13'
 tags:
-- Company
-apis: []
+  - Company
+  - enterprise_software
+  - collaboration
+  - email
+  - directory_services
+  - identity
+  - groupware
+  - ldap
+  - soap
+  - legacy
+  - self_hosted
+  - endpoint_management
+apis:
+  - aid: novell:groupwise-administration-rest-api
+    name: GroupWise Administration REST API
+    description: >-
+      REST/JSON administration API for a GroupWise system, served by the GroupWise Administration Service that installs
+      alongside the GroupWise agents. Introduced under the "Windermere" codename for GroupWise 2014. The published
+      reference lists 220 resource paths and 357 operations (166 GET, 69 PUT, 68 POST, 54 DELETE) across nine groups -
+      api, application, async, diagnostics, domains, node, object, prefs and system - covering domains, post offices,
+      users, groups, resources, libraries, gateways, MTAs, POAs, LDAP servers, internet domains, move requests and
+      restore areas. Requests and responses are available as application/json or application/xml. The service is
+      customer-hosted; there is no Novell-operated endpoint.
+    humanURL: https://www.novell.com/documentation/groupwise25/gwsdk_admin_rest_api/data/bookinfo.html
+    baseURL: https://{server_address}:9710/gwadmin-service
+    image: https://www.novell.com/favicon.ico
+    tags:
+      - collaboration
+      - email
+      - administration
+      - rest
+      - self_hosted
+    properties:
+      - type: Documentation
+        url: https://www.novell.com/documentation/groupwise25/gwsdk_admin_rest_api/data/bookinfo.html
+      - type: APIReference
+        url: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb/data/application.htm
+      - type: DataModel
+        url: data-model/novell-data-model.yml
+  - aid: novell:groupwise-web-services-soap
+    name: GroupWise Web Services (SOAP)
+    description: >-
+      Server-side SOAP protocol for reading and writing a GroupWise user's mailbox, spoken directly to the GroupWise
+      Post Office Agent over HTTP/HTTPS. 96 documented methods defined in the methods.xsd schema, from loginRequest and
+      getItemsRequest through createItemRequest, sendItemRequest, moveItemsRequest, purgeDeletedItemsRequest and
+      restoreItemRequest, plus a companion GroupWise Web Services Events surface for mailbox event notification.
+      Authentication is a plain-text user credential or a GroupWise Trusted Application name and key, returning a
+      session key that every subsequent call carries. Customer-hosted: the endpoint is the POA, default port 7191.
+    humanURL: https://www.novell.com/developer/ndk/groupwise/groupwise_web_service_(soap).html
+    baseURL: https://{poa_address}:7191/soap
+    image: https://www.novell.com/favicon.ico
+    tags:
+      - collaboration
+      - email
+      - calendar
+      - soap
+      - self_hosted
+    properties:
+      - type: Documentation
+        url: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/bktitle.html
+      - type: APIReference
+        url: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b8cg4px.html
+      - type: ErrorCatalog
+        url: errors/novell-error-codes.yml
+  - aid: novell:dsml-for-edirectory-soap
+    name: DSML for eDirectory (SOAP)
+    description: >-
+      DSML v2 for eDirectory ships a deployable Java web archive (.war) that exposes Novell eDirectory as a SOAP web
+      service using DSML - the OASIS Directory Services Markup Language standard for representing directory information
+      as XML. Customer-deployed inside a servlet container against a local eDirectory tree. The NDK page is still
+      indexed on novell.com but now 301s to the Micro Focus eDirectory developer documentation; the last published
+      build is novell-dsml-devel-2006.02.22 and every download link on the page 404s.
+    humanURL: https://www.microfocus.com/documentation/edirectory-developer-documentation/dsml-for-edirectory-soap/
+    image: https://www.novell.com/favicon.ico
+    tags:
+      - directory_services
+      - identity
+      - ldap
+      - soap
+      - self_hosted
+    properties:
+      - type: Documentation
+        url: https://www.microfocus.com/documentation/edirectory-developer-documentation/dsml-for-edirectory-soap/
 maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
-- FN: APIs.json
-  email: info@apis.io
+  - FN: Kin Lane
+    email: kin@apievangelist.com
+  - FN: APIs.json
+    email: info@apis.io
+common:
+- type: Website
+  url: https://www.novell.com/
+- type: DeveloperPortal
+  url: https://www.novell.com/developer/ndk/
+- type: Documentation
+  url: https://www.novell.com/documentation/
+- type: APIReference
+  url: https://www.novell.com/documentation/developer/groupwise_sdk/
+- type: Packages
+  url: packages/novell-packages.yml
+- type: SDKs
+  url: packages/novell-packages.yml
+- type: Authentication
+  url: authentication/novell-authentication.yml
+- type: Conformance
+  url: conformance/novell-conformance.yml
+- type: Conventions
+  url: conventions/novell-conventions.yml
+- type: ErrorCatalog
+  url: errors/novell-error-codes.yml
+- type: DataModel
+  url: data-model/novell-data-model.yml
+- type: Lifecycle
+  url: lifecycle/novell-lifecycle.yml
+- type: Deprecation
+  url: https://www.microfocus.com/lifecycle/
+- type: ChangeLog
+  url: changelog/novell-changelog.yml
+- type: LLMsTxt
+  url: llms/novell-llms.txt
+- type: Plans
+  url: plans/novell-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/novell-rate-limits.yml
+- type: DomainSecurity
+  url: security/novell-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/novell-vulnerability-disclosure.yml
+- type: Security
+  url: https://support.novell.com/security-alerts/index.html
+- type: GettingStarted
+  url: https://www.novell.com/developer/ndk/groupwise/develop_to_groupwise.html
+x-enrichment:
+  date: '2026-09-13'
+  status: enriched
+  artifacts_added: 14
+  pass: local-v3
+x-coverage:
+  state: covered
+  reason: covered
+  detail: >-
+    Novell's brand is retired and novell.com is an OpenText-operated redirector, but the developer surface is
+    genuinely readable and was profiled from it: the NDK A-Z index, the GroupWise SDK documentation set
+    published per release up to GroupWise 25, a live vulnerability disclosure program, a 22-family error-code
+    registry and two first-party client libraries on public registries. What does not exist is a
+    machine-readable contract - the GroupWise SOAP WSDL is referenced by name but shipped only inside
+    novell-gwsoap-devel-2013.01.15.zip on ftp://sdk.provo.novell.com, which no longer resolves, and the
+    Administration REST API's WADL is generated at runtime on the customer's own server.
+  evidence:
+    - url: https://www.novell.com/developer/ndk/
+      status: 200
+    - url: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/bktitle.html
+      status: 200
+    - url: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb/data/application.htm
+      status: 200
+    - url: https://support.novell.com/security-alerts/index.html
+      status: 200
+    - url: https://www.novell.com/openapi.json
+      status: 404
+    - url: https://www.novell.com/developer/ndk/gwsoap/novell-gwsoap-devel-2013.01.15.zip
+      status: 404
+  checked: '2026-09-13'

@@ -1,0 +1,231 @@
+generated: '2026-09-13'
+method: derived
+source: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb/data/application.htm
+name: Novell GroupWise data model
+description: >-
+  Entity graph derived from the published GroupWise Administration REST API resource listing (220 resource
+  paths, 357 operations) and the GroupWise Web Services SOAP schema element index. The Admin API's URL tree is
+  itself the relationship graph - GroupWise addresses every object by its containment path, so
+  /gw-api/domains/{domain}/postoffices/{postoffice}/users/{user} is not a routing convenience, it is the
+  object's identity. Derived from documentation only; no machine-readable schema (WSDL, XSD or OpenAPI) was
+  obtainable for either surface, so field-level types are not modelled here.
+derived_from:
+  - url: https://www.novell.com/documentation/developer/groupwise_sdk/gwsdk_gwadminweb/data/application.htm
+    what: 220 resource paths, HTTP methods, path templates
+  - url: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b8gjrtc.html
+    what: SOAP schema element index (mailbox-side entities)
+identity:
+  scheme: containment-path
+  note: >-
+    Administration objects are named by their position in the system tree, dotted in user-facing form and
+    slashed in the URL - the reference's own example is the object id
+    "USER.MyDomain.MyPostOffice.MyUser", reachable as /gw-api/object/USER.MyDomain.MyPostOffice.MyUser. A
+    parallel type-first index exists at /gw-api/list/{type} (for example /gw-api/list/USER returns all users)
+    and /gw-api/list/{type}/{base} scopes that listing to a subtree.
+entities:
+  - name: System
+    root: true
+    path: gw-api/system
+    description: >-
+      The GroupWise system itself. Owns everything that is not scoped to a single domain - internet domains,
+      LDAP servers, calendar publishing hosts, global signatures, custom addresses, move requests, restore
+      areas and the administration services.
+    operations: 75
+  - name: Domain
+    path: gw-api/domains/{domain}
+    description: >-
+      Top-level administrative container. Owns post offices, gateways, an MTA, an address book configuration,
+      client options, custom addresses, links to other domains, and an administrator.
+    operations: 122
+  - name: PostOffice
+    path: gw-api/domains/{domain}/postoffices/{postoffice}
+    description: >-
+      The mailbox-bearing container inside a domain. Owns users, groups, resources, libraries, nicknames,
+      POAs, aliases, client options and sync contexts. This is also the object the SOAP surface talks to -
+      the POA that serves a post office is the SOAP endpoint.
+    operations: 86
+  - name: User
+    path: gw-api/domains/{domain}/postoffices/{postoffice}/users/{user}
+    description: A GroupWise account. Owns email addresses, aliases, nicknames, group memberships, administered groups, client options, resources, a restore area and a restorable mailbox.
+    operations: 21
+  - name: Group
+    path: gw-api/domains/{domain}/postoffices/{postoffice}/groups/{group}
+    description: A distribution group. Owns members, email addresses, nicknames and its own group memberships; supports rename.
+    operations: 11
+  - name: Resource
+    path: gw-api/domains/{domain}/postoffices/{postoffice}/resources/{resource}
+    description: A non-human mailbox (room, equipment, shared account) with the same email-address, membership and restore surface as a user.
+    operations: 15
+  - name: Library
+    path: gw-api/domains/{domain}/postoffices/{postoffice}/libraries/{library}
+    description: Document library. Owns access rights per user, storage areas and enabled storage areas.
+    operations: 13
+  - name: Gateway
+    path: gw-api/domains/{domain}/gateways/{gateway}
+    description: Message-transfer gateway on a domain. Owns administrators, aliases, class-of-service definitions with their members, SMTP relay allow/prevent exceptions, and database recover/validate actions.
+    operations: 15
+  - name: MTA
+    path: gw-api/domains/{domain}/mta
+    description: Message Transfer Agent for a domain. Exposes manage actions and a reference event list.
+    operations: 4
+  - name: POA
+    path: gw-api/domains/{domain}/postoffices/{postoffice}/poas/{poa}
+    description: >-
+      Post Office Agent. Exposes manage actions and reference events. This is the same process that serves
+      the GroupWise Web Services SOAP endpoint on port 7191 - the one object that both APIs describe.
+    operations: 5
+  - name: AdminService
+    path: gw-api/system/adminservices/{adminservice}
+    description: An installed Administration Service node. Owns certificates, configuration, a file browser, manage actions and references to its domain and post offices.
+    operations: 11
+  - name: AsyncJob
+    path: gw-api/async/{id}
+    description: >-
+      A scheduled long-running administrative job. Listed filtered to the submitting administrator, cancellable
+      by DELETE, auto-removed 60 seconds after completion.
+    operations: 3
+  - name: MoveRequest
+    path: gw-api/system/moverequests/{id}
+    description: A pending user or resource move between post offices, with its own actions and pending state.
+    operations: 4
+  - name: RestoreArea
+    path: gw-api/system/restoreareas
+    description: Backup location a mailbox can be restored from; referenced by user and resource restoremailbox operations.
+    operations: 4
+  - name: LdapServer
+    path: gw-api/system/ldapservers/{ldapserver}
+    description: External LDAP directory used for authentication; references the post offices bound to it.
+    operations: 3
+  - name: InternetDomain
+    path: gw-api/system/internetdomains/{internetdomain}
+    description: Internet domain name the system accepts and stamps on addresses.
+  - name: CustomAddress
+    path: gw-api/system/customaddresses/{customAddress}
+    description: Custom address format, associable with a domain and testable before use.
+    operations: 7
+  - name: CalPubHost
+    path: gw-api/system/calpubhosts/{calPubHost}
+    description: Calendar publishing host.
+  - name: GlobalSignature
+    path: gw-api/system/globalsignatures/{name}
+    description: System-wide message signature.
+  - name: Item
+    surface: soap
+    description: >-
+      The mailbox-side root entity on the SOAP surface - mail, appointment, task, note, phone message and
+      document share one Item type discriminated by item type. Carries attachments, categories, custom
+      fields, recurrence, free/busy participation and a link type back to related items.
+  - name: Folder
+    surface: soap
+    description: Mailbox folder, typed (calendar, trash, shared and so on) with folder flags and calendar folder attributes.
+  - name: AddressBook
+    surface: soap
+    description: Address book and its entries (AddressBookItem), including Contact records with ContactNotes.
+relationships:
+  - from: System
+    to: Domain
+    type: has_many
+    via: gw-api/domains
+  - from: Domain
+    to: PostOffice
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices
+  - from: Domain
+    to: Gateway
+    type: has_many
+    via: gw-api/domains/{domain}/gateways
+  - from: Domain
+    to: MTA
+    type: has_one
+    via: gw-api/domains/{domain}/mta
+  - from: Domain
+    to: Domain
+    type: has_many
+    via: gw-api/domains/{domain}/links
+    note: Inter-domain links - the domain graph is self-referential.
+  - from: PostOffice
+    to: User
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/users
+  - from: PostOffice
+    to: Group
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/groups
+  - from: PostOffice
+    to: Resource
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/resources
+  - from: PostOffice
+    to: Library
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/libraries
+  - from: PostOffice
+    to: POA
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/poas
+  - from: PostOffice
+    to: LdapServer
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/refldapservers
+    note: Reference relationship - the LDAP server is owned by System, not by the post office.
+  - from: User
+    to: Group
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/users/{user}/groupmemberships
+  - from: User
+    to: Group
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/users/{user}/administeredgroups
+    note: A second, distinct user-to-group edge - membership and administration are modelled separately.
+  - from: User
+    to: Resource
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/users/{user}/resources
+    note: Resources a user owns or acts for.
+  - from: Group
+    to: User
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/groups/{group}/members
+  - from: Library
+    to: User
+    type: has_many
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/libraries/{library}/accessrights
+    note: Per-user access rights, addressed by userid.
+  - from: Gateway
+    to: ClassOfService
+    type: has_many
+    via: gw-api/domains/{domain}/gateways/{gateway}/classofservice
+  - from: System
+    to: AdminService
+    type: has_many
+    via: gw-api/system/adminservices
+  - from: AdminService
+    to: Domain
+    type: belongs_to
+    via: gw-api/system/adminservices/{adminservice}/refdomain
+  - from: AdminService
+    to: PostOffice
+    type: has_many
+    via: gw-api/system/adminservices/{adminservice}/refpostoffices
+  - from: User
+    to: RestoreArea
+    type: has_one
+    via: gw-api/domains/{domain}/postoffices/{postoffice}/users/{user}/restorearea
+  - from: Folder
+    to: Item
+    type: has_many
+    via: SOAP getItemsRequest scoped to a folder id
+  - from: Item
+    to: Attachment
+    type: has_many
+    via: SOAP getAttachmentRequest / AttachmentInfo
+counts:
+  admin_rest_resources: 220
+  admin_rest_operations: 357
+  admin_rest_methods:
+    GET: 166
+    PUT: 69
+    POST: 68
+    DELETE: 54
+  soap_methods: 96
+  soap_methods_source: https://www.novell.com/documentation/groupwise25/gwsdk_web_services/data/b8cg4px.html

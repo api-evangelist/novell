@@ -1,0 +1,90 @@
+generated: '2026-09-13'
+method: probed
+source: https://www.novell.com/
+name: Novell well-known discovery probe
+description: >-
+  Probe of the RFC 8615 /.well-known/ namespace on every host this record knows. Novell's baseURLs are
+  customer-hosted templates ({server_address}:9999, {poa_address}:7191), so there is no Novell-operated API
+  host to probe; only the registrable domain and its www host are reachable. Every path returned 404 with an
+  HTML body. NO WellKnown, APICatalog or SecurityTxt pointer is emitted from this file - it records an
+  absence, not a presence.
+summary:
+  hosts_probed: 2
+  paths_probed: 9
+  documents_found: 0
+  pointer_emitted: false
+hosts:
+  - host: www.novell.com
+    note: >-
+      Serves the archived Novell developer and documentation tree. Root path 301s to
+      www.microfocus.com/en-us/products/novell/overview and on to www.opentext.com; /.well-known/* is not
+      redirected and answers a real 404 page.
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+      - path: /.well-known/aauth-resource.json
+        status: 404
+        file: null
+  - host: novell.com
+    note: >-
+      Apex is unreachable over HTTPS - the certificate presented is CN=redirector.novell.com (O=Open Text
+      Corporation) and its SAN list does not include the bare novell.com name, so TLS verification fails
+      before any request is made. Recorded as status 0 (connection never completed), not as a 404.
+    documents:
+      - path: /.well-known/security.txt
+        status: 0
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 0
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 0
+        file: null
+      - path: /.well-known/oauth-protected-resource
+        status: 0
+        file: null
+      - path: /.well-known/api-catalog
+        status: 0
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 0
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 0
+        file: null
+      - path: /.well-known/agent.json
+        status: 0
+        file: null
+      - path: /.well-known/aauth-resource.json
+        status: 0
+        file: null
+notes:
+  - >-
+    www.microfocus.com (the successor documentation host that the eDirectory NDK pages 301 to) answers 301 on
+    every /.well-known/* path, forwarding to www.opentext.com, which refuses our crawler at the edge (HTTP
+    444). It is not a Novell-operated host and is not counted here.
+  - >-
+    No A2A agent card was found on any host, so no a2a/ artifact was written - the pipeline never authors one
+    on a provider's behalf.
