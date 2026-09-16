@@ -24,6 +24,19 @@ created: '2026-09-13'
 modified: '2026-09-13'
 tags:
   - Company
+  - Enterprise Software
+  - Collaboration
+  - Email
+  - Directory Services
+  - Identity
+  - groupware
+  - LDAP
+  - SOAP
+  - Legacy
+  - Self-Hosted
+  - Endpoint Management
+tags_raw:
+  - Company
   - enterprise_software
   - collaboration
   - email
@@ -50,6 +63,12 @@ apis:
     baseURL: https://{server_address}:9710/gwadmin-service
     image: https://www.novell.com/favicon.ico
     tags:
+      - Collaboration
+      - Email
+      - Administration
+      - REST
+      - Self-Hosted
+    tags_raw:
       - collaboration
       - email
       - administration
@@ -75,6 +94,12 @@ apis:
     baseURL: https://{poa_address}:7191/soap
     image: https://www.novell.com/favicon.ico
     tags:
+      - Collaboration
+      - Email
+      - Calendar
+      - SOAP
+      - Self-Hosted
+    tags_raw:
       - collaboration
       - email
       - calendar
@@ -98,6 +123,12 @@ apis:
     humanURL: https://www.microfocus.com/documentation/edirectory-developer-documentation/dsml-for-edirectory-soap/
     image: https://www.novell.com/favicon.ico
     tags:
+      - Directory Services
+      - Identity
+      - LDAP
+      - SOAP
+      - Self-Hosted
+    tags_raw:
       - directory_services
       - identity
       - ldap
