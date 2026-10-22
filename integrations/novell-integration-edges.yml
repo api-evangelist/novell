@@ -1,0 +1,46 @@
+edges:
+- partner_name: NIAP Product Compliant List (US CCEVS)
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.niap-ccevs.org/Product/PCL.cfm
+  category: NIAP Protection Profile conformance (US Common Criteria scheme)
+  contract_reference:
+    register: NIAP Product Compliant List (niap-ccevs.org/Product/PCL.cfm; public JSON /api/project/product/pcl_products_all/)
+    standard: NIAP-approved Protection Profiles under ISO/IEC 15408 Common Criteria for Information Technology Security
+      Evaluation (CCRA)
+    spec_file: null
+    role: niap-pcl-vendor
+    registered_name: Novell Inc. (Formerly e-Security, Inc.)
+    matched_domain: novell.com
+    matched_by: domain
+    signal_note: 'certified_products = one entry per NIAP technology type with a Certified (current) or Archived
+      (lapsed: true) PCL product, Protection Profiles named; products In Progress are listing only (in_evaluation),
+      never certified; product counts are context, never counted'
+    detected_by: sweep-common-criteria-certified-products.py
+    detected: '2026-10-21'
+    certified_products:
+    - product: Enterprise Security Management
+      product_type: Enterprise Security Management
+      lapsed: true
+      standard: NIAP-approved Protection Profiles under ISO/IEC 15408 Common Criteria for Information Technology
+        Security Evaluation (CCRA)
+      protection_profiles:
+      - none
+    identity: wikidata Q223407 'Novell' P856 http://www.novell.com/
+    identity_source: wikidata P856 (labelled provenance step; Kin 2026-10-15 decision 1)
+  detected_by: sweep-common-criteria-certified-products.py
+  first_seen: '2026-10-21'
+generated: '2026-10-21'
+method: searched
+source:
+- https://www.commoncriteriaportal.org/products/certified_products.csv
+- https://www.commoncriteriaportal.org/products/certified_products-archived.csv
+- https://www.niap-ccevs.org/Product/PCL.cfm
+checked:
+- https://www.commoncriteriaportal.org/products/certified_products-archived.csv
+- https://www.commoncriteriaportal.org/products/certified_products.csv
+- https://www.niap-ccevs.org/Product/PCL.cfm
