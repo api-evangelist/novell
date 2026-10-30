@@ -64,4 +64,103 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Novell is a company surfaced via the API Evangelist harvest backlog (source: absent-parent) and added to the network as a stub for full-pipeline profiling.
+Novell, Inc. was a Provo, Utah network-software company best known for NetWare, eDirectory, GroupWise and ZENworks. It was acquired by The Attachmate Group in 2011, folded into Micro Focus with the 2014 Attachmate acquisition, and passed to OpenText when OpenText bought Micro Focus in 2023. The Novell corporate brand is retired and novell.com is now an OpenText-operated redirector, but a large part of the Novell developer surface is still served on www.novell.com and is not merely archival: the Novell Developer Kit (NDK) A-Z index, the eDirectory developer kits (which now 301 to microfocus.com), and the GroupWise SDK documentation set published per release right up to GroupWise 25. Two callable API surfaces are documented there - the GroupWise Administration REST API (220 resource paths, 357 operations, served by the customer's own GroupWise Administration Service on port 9710) and the GroupWise Web Services SOAP protocol against the Post Office Agent (96 documented methods on port 7191). Both are customer-hosted, not SaaS: there is no Novell-operated endpoint, no key to obtain and no sign-up. No machine-readable contract is obtainable - a WSDL is referenced by name but shipped only inside SDK archives on hosts that no longer resolve, and the Admin API's WADL is generated at runtime on the customer's own server. The documentation outlived the distribution.
+
+**Areas:** Company · Enterprise Software · Collaboration · Email · Directory Services · Identity · groupware · LDAP · SOAP · Legacy · Self-Hosted · Endpoint Management
+
+## Novell on APIs.io
+
+Everything profiled for Novell is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/novell/](https://apis.io/providers/novell/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [GroupWise Administration REST API](https://apis.io/apis/novell/groupwise-administration-rest-api/) — REST/JSON administration API for a GroupWise system, served by the GroupWise Administration Service that installs alongside the GroupWise agents. Introduced…
+- [GroupWise Web Services (SOAP)](https://apis.io/apis/novell/groupwise-web-services-soap/) — Server-side SOAP protocol for reading and writing a GroupWise user's mailbox, spoken directly to the GroupWise Post Office Agent over HTTP/HTTPS. 96…
+- [DSML for eDirectory (SOAP)](https://apis.io/apis/novell/dsml-for-edirectory-soap/) — DSML v2 for eDirectory ships a deployable Java web archive (.war) that exposes Novell eDirectory as a SOAP web service using DSML - the OASIS Directory…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Novell Authentication](https://apis.io/security/novell/novell-authentication/)
+- [Novell Domain Security](https://apis.io/security/novell/novell-domain-security/)
+- [Novell Vulnerability Disclosure](https://apis.io/security/novell/novell-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Novell Plans Pricing](https://apis.io/plans/novell/novell-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Novell Rate Limits](https://apis.io/rate-limits/novell/novell-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.novell.com/)
+- [Documentation](https://www.novell.com/documentation/)
+- [Getting started](https://www.novell.com/developer/ndk/groupwise/develop_to_groupwise.html)
+- [API reference](https://www.novell.com/documentation/developer/groupwise_sdk/)
+- [Security](https://support.novell.com/security-alerts/index.html)
+
+## API Evangelist rating
+
+**Kin Score 25.4** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 62.5 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 34.2 |
+| Developer ergonomics | 57.1 |
+| Access clarity | 0.0 |
+
+**Agent readiness 7.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 22.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/novell/](https://apis.io/providers/novell/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Novell: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/novell/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
